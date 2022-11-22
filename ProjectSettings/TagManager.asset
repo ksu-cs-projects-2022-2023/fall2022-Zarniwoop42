@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Weapon
+  - Enemy
+  - Death
+  - Printer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Action
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Space
+    uniqueID: 1275654419
+    locked: 0
+  - name: Ground
+    uniqueID: 1454219697
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Printer
+    uniqueID: 2658206797
+    locked: 0
+  - name: Weapon
+    uniqueID: 632259765
+    locked: 0

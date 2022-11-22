@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 46d9a4e2e7584994c8e11360299a1fb0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - g: {instanceID: 0}
+  - cam: {instanceID: 0}
+  - deathScreen: {fileID: 2598205721207366807, guid: 2a0d95555a2963e4fb2a98d23ae4ca43, type: 3}
+  - Shrieker: {fileID: 6184266009731094574, guid: badae478ec18960409424c37c0357768, type: 3}
+  - NailGun: {instanceID: 0}
+  - player: {fileID: 7854482894003734182, guid: 917a2df883860fd4c91e683bede4d896, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
