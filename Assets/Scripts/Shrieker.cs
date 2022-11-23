@@ -136,11 +136,11 @@ public class Shrieker : MonoBehaviour
 
             RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action")) | (1 << LayerMask.NameToLayer("ProjAction")));
 
-            Debug.DrawLine(transform.position, point, Color.green);
+            //Debug.DrawLine(transform.position, point, Color.green);
 
             if(hit.collider != null)
                 if(hit.collider.gameObject.CompareTag("Player") || hit.collider.gameObject.GetComponent<ProjectileBehavior>() != null){
-                    Debug.DrawLine(transform.position, hit.point, Color.yellow);
+            //        Debug.DrawLine(transform.position, hit.point, Color.yellow);
                     return true;
                 }
         }

@@ -212,22 +212,13 @@ namespace Gameplay
                     Instantiate(projectile, new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), Quaternion.Euler(0, 0, deg));
                 }else{
                     Vector2 point = new Vector2(mousePos[0] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy), mousePos[1] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy));
-                    Vector2 origin = new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]);
+                    Vector2 origin = new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]);
 
-                    RaycastHit2D hit = Physics2D.Raycast(origin, (point - origin).normalized, GD.distance, (1 << LayerMask.NameToLayer("Action2")) | (1 << LayerMask.NameToLayer("Action")) );
+                    RaycastHit2D hit = Physics2D.Raycast(origin, (point - origin).normalized, GD.distance+20, (1 << LayerMask.NameToLayer("Action2")) | (1 << LayerMask.NameToLayer("Action")) );
+                    //Debug.DrawLine(origin, point, Color.black, 2f);
 
-                    DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), hit.point);
-
-                    //if(hit.collider != null){
-                     //   var ET = hit.collider.gameObject.transform;
-                     //   DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), ET.position);
-                     //   if(hit.collider.gameObject.CompareTag("Enemy")){
-                    //        Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
-                    //    }
-                    //}else{
-                        //DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), point);
-
-                    //}
+                    DrawLine(new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]), hit.point);
+                    Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), hit.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
                 }
 
             }
@@ -244,7 +235,7 @@ namespace Gameplay
             lr.material = new Material (Shader.Find ("Sprites/Default"));
             //lr.material.color = Color.red; 
 
-            lr.SetVertexCount (2);
+            //lr.SetVertexCount (2);
 
             Gradient gradient;
             GradientColorKey[] colorKey;

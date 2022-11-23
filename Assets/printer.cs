@@ -105,7 +105,7 @@ public class printer : MonoBehaviour
         gr.transform.parent = g.transform;
 
 
-        int bRand = 3;//UnityEngine.Random.Range(0, 5);
+        int bRand = UnityEngine.Random.Range(0, 5);
         var b = new GameObject().AddComponent<SpriteRenderer>();
         b.GetComponent<SpriteRenderer>().sprite = Barrel[bRand];
         b.GetComponent<SpriteRenderer>().sortingLayerName = "Weapon";
