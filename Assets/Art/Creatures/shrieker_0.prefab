@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5780993889002357122}
   - component: {fileID: 5780993889002357123}
   - component: {fileID: 6360028707893308897}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: shrieker_0
   m_TagString: Enemy
   m_Icon: {fileID: 0}

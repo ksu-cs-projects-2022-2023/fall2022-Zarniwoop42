@@ -105,7 +105,7 @@ public class printer : MonoBehaviour
         gr.transform.parent = g.transform;
 
 
-        int bRand = UnityEngine.Random.Range(0, 5);
+        int bRand = 3;//UnityEngine.Random.Range(0, 5);
         var b = new GameObject().AddComponent<SpriteRenderer>();
         b.GetComponent<SpriteRenderer>().sprite = Barrel[bRand];
         b.GetComponent<SpriteRenderer>().sortingLayerName = "Weapon";
@@ -140,7 +140,7 @@ public class printer : MonoBehaviour
         g.transform.GetChild(0).GetComponent<GunDetails>().fireTime = 2.1f - tRand;
         g.transform.GetChild(0).GetComponent<GunDetails>().ammoMax = (cRand + 1) * 5;
         g.transform.GetChild(0).GetComponent<GunDetails>().reloadTime = 2.1f - grRand;
-        g.transform.GetChild(0).GetComponent<GunDetails>().distance = (float)(scRand)/4f + 0.2f;
+        g.transform.GetChild(0).GetComponent<GunDetails>().distance = (float)(scRand)/1.5f + 0.2f;
         g.transform.GetChild(0).GetComponent<GunDetails>().accuracy = 1 - (float)(stRand)/2f;
         g.transform.GetChild(0).GetComponent<GunDetails>().barrel = bRand;
     }

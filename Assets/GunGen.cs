@@ -33,6 +33,7 @@ namespace Gameplay
         private GameObject reloadSprite = null;
 
         private bool noSprite = false;
+        private bool beam = false;
 
 
         void Start()
@@ -56,8 +57,12 @@ namespace Gameplay
 
             noSprite = GD.noSprite;
 
-            if(noSprite)
+            if(noSprite){
                 sp.enabled = false;
+                if(GD.barrel == 3){
+                    beam = true;
+                }
+            }
         }
 
         void Update()
@@ -191,21 +196,85 @@ namespace Gameplay
 
                 particles.transform.parent = player.transform;
 
-                var angle = (mousePos - transform.position).normalized;
-                var deg = Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg;
+                if(!beam){
+                    var angle = (mousePos - transform.position).normalized;
+                    var deg = Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg;
 
-                if (deg<0)
-                    deg+=360;
+                    if (deg<0)
+                        deg+=360;
 
-                
-                if(!noSprite){
-                    particleOffset = particleOffset/1.6f;
-                    deg += 140; //for nail orientaion correction
+                    
+                    if(!noSprite){
+                        particleOffset = particleOffset/1.6f;
+                        deg += 140; //for nail orientaion correction
+                    }
+                    
+                    Instantiate(projectile, new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), Quaternion.Euler(0, 0, deg));
+                }else{
+                    Vector2 point = new Vector2(mousePos[0] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy), mousePos[1] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy));
+                    Vector2 origin = new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]);
+
+                    RaycastHit2D hit = Physics2D.Raycast(origin, (point - origin).normalized, GD.distance, (1 << LayerMask.NameToLayer("Action2")) | (1 << LayerMask.NameToLayer("Action")) );
+
+                    DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), hit.point);
+
+                    //if(hit.collider != null){
+                     //   var ET = hit.collider.gameObject.transform;
+                     //   DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), ET.position);
+                     //   if(hit.collider.gameObject.CompareTag("Enemy")){
+                    //        Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+                    //    }
+                    //}else{
+                        //DrawLine(new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), point);
+
+                    //}
                 }
 
-                Instantiate(projectile, new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), Quaternion.Euler(0, 0, deg));
             }
         }
+
+         void DrawLine(Vector3 start, Vector3 end, float duration = 0.2f)
+         {
+             GameObject myLine = new GameObject();
+             myLine.transform.position = start;
+             myLine.AddComponent<LineRenderer>();
+             LineRenderer lr = myLine.GetComponent<LineRenderer>();
+
+            lr.sortingOrder = 1;
+            lr.material = new Material (Shader.Find ("Sprites/Default"));
+            //lr.material.color = Color.red; 
+
+            lr.SetVertexCount (2);
+
+            Gradient gradient;
+            GradientColorKey[] colorKey;
+            GradientAlphaKey[] alphaKey;
+
+            gradient = new Gradient();
+
+            // Populate the color keys at the relative time 0 and 1 (0 and 100%)
+            colorKey = new GradientColorKey[2];
+            colorKey[0].color = Color.red;
+            colorKey[0].time = 0.0f;
+            colorKey[1].color = Color.blue;
+            colorKey[1].time = 1.0f;
+
+            // Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
+            alphaKey = new GradientAlphaKey[2];
+            alphaKey[0].alpha = 1.0f;
+            alphaKey[0].time = 0.0f;
+            alphaKey[1].alpha = 0.0f;
+            alphaKey[1].time = 1.0f;
+
+            gradient.SetKeys(colorKey, alphaKey);
+
+            lr.colorGradient = gradient;
+            lr.startWidth = 0.1f;
+            lr.endWidth = 0.1f;
+            lr.SetPosition(0, start);
+            lr.SetPosition(1, end);
+            GameObject.Destroy(myLine, duration);
+         }
         
     }
 }

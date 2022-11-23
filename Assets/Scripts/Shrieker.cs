@@ -122,30 +122,26 @@ public class Shrieker : MonoBehaviour
             float xCord = (float)(r * Math.Cos(angle) + transform.position.x);
             float yCord = (float)(r * Math.Sin(angle) + transform.position.y);
         
-            if(left && xCord < transform.position.x && ( yCord > transform.position.y - 1 && yCord < transform.position.y + 3)){
+            if(left && xCord < transform.position.x && ( yCord > transform.position.y - 2 && yCord < transform.position.y + 3)){
                 xCord = (float)((r+20) * Math.Cos(angle) + transform.position.x);
                 yCord = (float)((r+20) * Math.Sin(angle) + transform.position.y);
-            }else if(!left && xCord > transform.position.x && ( yCord > transform.position.y - 1 && yCord < transform.position.y + 3)){
+            }else if(!left && xCord > transform.position.x && ( yCord > transform.position.y - 2 && yCord < transform.position.y + 3)){
                 xCord = (float)((r+20) * Math.Cos(angle) + transform.position.x);
                 yCord = (float)((r+20) * Math.Sin(angle) + transform.position.y);
-            }else{
-
             }
             
             Vector2 point = new Vector2(xCord, yCord);
 
             //Debug.DrawLine(transform.position, point, Color.green);
 
-            RaycastHit2D hit = Physics2D.Linecast(transform.position, point, 1 << LayerMask.NameToLayer("Action"));
+            RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action")) | (1 << LayerMask.NameToLayer("ProjAction")));
 
             Debug.DrawLine(transform.position, point, Color.green);
 
             if(hit.collider != null)
-                if(hit.collider.gameObject.CompareTag("Player")){
+                if(hit.collider.gameObject.CompareTag("Player") || hit.collider.gameObject.GetComponent<ProjectileBehavior>() != null){
                     Debug.DrawLine(transform.position, hit.point, Color.yellow);
                     return true;
-                }else{
-                    //Debug.DrawLine(transform.position, point, Color.blue);
                 }
         }
         return false;
@@ -154,10 +150,12 @@ public class Shrieker : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other){
         try{
             Collider2D o = other;
-            Debug.Log(o.name.ToString());
+            //Debug.Log(o.name.ToString());
             if(o != null){
                 if(o.GetComponent<ProjectileBehavior>() != null){
                     health -= o.GetComponent<ProjectileBehavior>().damage;
+                }else if(o.GetComponent<ExplosionBehavior>() != null){
+                    health -= o.GetComponent<ExplosionBehavior>().damage;
                 }
             }
         }catch(NullReferenceException e){

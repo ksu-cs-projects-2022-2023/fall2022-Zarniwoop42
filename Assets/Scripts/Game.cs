@@ -57,7 +57,7 @@ namespace Gameplay
 
             cam.transform.position = new Vector3(player.transform.position[0], player.transform.position[1], -10);
 
-            Spawner.Spawn(Shrieker, safeSpawns, 1);
+            Spawner.Spawn(Shrieker, safeSpawns, 3);
             Spawner.Spawn(printer, safeSpawns, 1);
             Spawner.Spawn(Gun, safeSpawns, 1, NailGun);
         }

@@ -232,5 +232,8 @@ MonoBehaviour:
   turnOffset: 0.3
   ammoMax: 10
   accuracy: 1
+  distance: 5
   projectile: {fileID: 0}
   sprite: {fileID: 0}
+  noSprite: 0
+  barrel: 0
