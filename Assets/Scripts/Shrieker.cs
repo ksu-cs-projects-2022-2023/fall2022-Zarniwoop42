@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
+using Gameplay;
 
 public class Shrieker : MonoBehaviour
 {
@@ -27,9 +28,12 @@ public class Shrieker : MonoBehaviour
     private float time = 0.3f;
     private float timer;
 
+    private Game game;
+
     // Start is called before the first frame update
     void Start()
     {
+        game = GameObject.Find("Grid").GetComponent<Game>();
         timer = Time.time;
         player = GameObject.Find("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -56,6 +60,7 @@ public class Shrieker : MonoBehaviour
         }
 
         if(health <= 0){
+            game.points += 10;
             Destroy(gameObject);
         }
 

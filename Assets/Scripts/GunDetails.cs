@@ -15,6 +15,9 @@ namespace Gameplay
             ball,
             beam
         }
+
+        public int uniqueID;
+
         public fireType ft = fireType.bullet;
         
         public float reloadTime = 1.0f;

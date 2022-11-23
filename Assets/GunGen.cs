@@ -45,6 +45,7 @@ namespace Gameplay
 
             //set various useful links
             GD = transform.GetChild(0).GetComponent<GunDetails>();
+            GD.uniqueID = gameObject.GetInstanceID();
             player = GameObject.Find("Player");
             sp = transform.GetChild(0).GetComponent<SpriteRenderer>();
             ft = GD.ft;
@@ -231,11 +232,21 @@ namespace Gameplay
                     Vector2 point = new Vector2(mousePos[0] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy), mousePos[1] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy));
                     Vector2 origin = new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]);
 
-                    RaycastHit2D hit = Physics2D.Raycast(origin, (point - origin).normalized, GD.distance+20, (1 << LayerMask.NameToLayer("Action2")) | (1 << LayerMask.NameToLayer("Action")) );
+                    RaycastHit2D hit = Physics2D.Raycast(origin, (point - origin).normalized, Mathf.Infinity, (1 << LayerMask.NameToLayer("Action2")) | (1 << LayerMask.NameToLayer("Action")) );
                     //Debug.DrawLine(origin, point, Color.black, 2f);
 
                     DrawLine(new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]), hit.point);
+                    var dis = Vector3.Distance(hit.point, origin);
+                    Debug.Log("Distance: " + dis.ToString());
+                    if(dis > 15)
+                        dis = 15;
+                    
+                    
+                    for(int i = 5; i < ((16 - dis)/5) * ((1 + GD.distance)*2); i += 4){
+                        Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), new Vector3(hit.point[0] + UnityEngine.Random.Range(-0.5f, 0.5f), hit.point[1] + UnityEngine.Random.Range(-0.5f, 0.5f), 0), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+                    }
                     Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), hit.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+
                 }
 
             }
@@ -250,9 +261,6 @@ namespace Gameplay
 
             lr.sortingOrder = 1;
             lr.material = new Material (Shader.Find ("Sprites/Default"));
-            //lr.material.color = Color.red; 
-
-            //lr.SetVertexCount (2);
 
             Gradient gradient;
             GradientColorKey[] colorKey;

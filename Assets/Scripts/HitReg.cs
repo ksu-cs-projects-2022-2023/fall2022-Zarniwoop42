@@ -26,7 +26,8 @@ public class HitReg : MonoBehaviour
     private void Update() {
         if(health <= 0){
             allowInput = false;
-        }    
+        }
+        
         if(Input.GetKeyDown(KeyCode.F)){
             var temp = primary;
             primary = secondary;
