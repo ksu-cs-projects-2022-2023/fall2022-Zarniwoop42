@@ -36,41 +36,44 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void Update(){
         float distAdjust = 0;
-        if(barrel == 2){ //Energy ball
-            distAdjust = 4;
-            mousePos = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-            directionToTarget = ((new Vector3(mousePos[0] + UnityEngine.Random.Range(-accuracy, accuracy), mousePos[1] + UnityEngine.Random.Range(-accuracy, accuracy), 0)) - transform.position).normalized;
-        }else if(barrel == 1){
-            double r = 2.0;
-            distAdjust = 2;
-            for(double angle = 0; angle < 360; angle++){
-                float xCord = (float)(r * Math.Cos(angle) + transform.position.x);
-                float yCord = (float)(r * Math.Sin(angle) + transform.position.y);
-            
-                Vector2 point = new Vector2(xCord, yCord);
+        if(GD.noSprite){
+            if(barrel == 2){ //Energy ball
+                distAdjust = 4;
+                mousePos = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+                directionToTarget = ((new Vector3(mousePos[0] + UnityEngine.Random.Range(-accuracy, accuracy), mousePos[1] + UnityEngine.Random.Range(-accuracy, accuracy), 0)) - transform.position).normalized;
+            }else if(barrel == 1){
+                double r = 2.0;
+                distAdjust = 2;
+                for(double angle = 0; angle < 360; angle++){
+                    float xCord = (float)(r * Math.Cos(angle) + transform.position.x);
+                    float yCord = (float)(r * Math.Sin(angle) + transform.position.y);
+                
+                    Vector2 point = new Vector2(xCord, yCord);
 
-                //Debug.DrawLine(transform.position, point, Color.green);
+                    //Debug.DrawLine(transform.position, point, Color.green);
 
-                RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action2")) |(1 << LayerMask.NameToLayer("Action")) );
+                    RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action2")) |(1 << LayerMask.NameToLayer("Action")) );
 
-                Debug.DrawLine(transform.position, point, Color.green);
+                    Debug.DrawLine(transform.position, point, Color.green);
 
-                if(hit.collider != null){
-                    var ET = hit.collider.gameObject.transform;
-                    Debug.Log(hit.collider.gameObject.name.ToString());
-                    if(hit.collider.gameObject.CompareTag("Enemy")){
-                        Debug.DrawLine(transform.position, hit.point, Color.yellow);
-                        var angle2 = (ET.position - transform.position).normalized;
-                        var deg2 = Mathf.Atan2(angle2.y, angle2.x) * Mathf.Rad2Deg;
+                    if(hit.collider != null){
+                        var ET = hit.collider.gameObject.transform;
+                        Debug.Log(hit.collider.gameObject.name.ToString());
+                        if(hit.collider.gameObject.CompareTag("Enemy")){
+                            Debug.DrawLine(transform.position, hit.point, Color.yellow);
+                            var angle2 = (ET.position - transform.position).normalized;
+                            var deg2 = Mathf.Atan2(angle2.y, angle2.x) * Mathf.Rad2Deg;
 
-                        if (deg2<0)
-                            deg2+=360;
-                        directionToTarget = ((new Vector3(ET.position[0] + UnityEngine.Random.Range(-accuracy, accuracy), ET.position[1] + UnityEngine.Random.Range(-accuracy, accuracy), 0)) - transform.position).normalized;
-                        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, deg2), Time.deltaTime * 5f);
+                            if (deg2<0)
+                                deg2+=360;
+                            directionToTarget = ((new Vector3(ET.position[0] + UnityEngine.Random.Range(-accuracy, accuracy), ET.position[1] + UnityEngine.Random.Range(-accuracy, accuracy), 0)) - transform.position).normalized;
+                            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, deg2), Time.deltaTime * 5f);
+                        }
                     }
                 }
             }
         }
+        
 
         distanceTimer += Time.deltaTime;
         rb.velocity = new Vector2(directionToTarget.x * moveSpeed, directionToTarget.y * moveSpeed).normalized * moveSpeed;

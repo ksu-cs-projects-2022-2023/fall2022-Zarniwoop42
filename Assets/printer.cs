@@ -137,7 +137,7 @@ public class printer : MonoBehaviour
         g.transform.position = new Vector2(player.transform.position[0], player.transform.position[1]);
 
         g.transform.GetChild(0).GetComponent<GunDetails>().noSprite = true;
-        g.transform.GetChild(0).GetComponent<GunDetails>().fireTime = 2.1f - tRand;
+        g.transform.GetChild(0).GetComponent<GunDetails>().fireTime = 1.1f - tRand/2f;
         g.transform.GetChild(0).GetComponent<GunDetails>().ammoMax = (cRand + 1) * 5;
         g.transform.GetChild(0).GetComponent<GunDetails>().reloadTime = 2.1f - grRand;
         g.transform.GetChild(0).GetComponent<GunDetails>().distance = (float)(scRand)/1.5f + 0.2f;

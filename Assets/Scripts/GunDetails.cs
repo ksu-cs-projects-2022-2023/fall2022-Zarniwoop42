@@ -31,10 +31,11 @@ namespace Gameplay
 
         public bool noSprite = false;
 
-        public int barrel;
+        public int barrel = 10;
         void Start(){
             
             if(!noSprite){
+                barrel = 10;
                 projectile = (GameObject)Resources.Load("nail_0", typeof(GameObject));
                 sprite = (GameObject)Resources.Load("NailGun_0", typeof(GameObject));
                 gameObject.GetComponent<SpriteRenderer>().sprite = sprite.GetComponent<SpriteRenderer>().sprite;

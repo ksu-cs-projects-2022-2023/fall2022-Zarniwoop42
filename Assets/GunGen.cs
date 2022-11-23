@@ -30,6 +30,7 @@ namespace Gameplay
         public GunDetails.fireType ft;
 
         private GameObject particles = null;
+        private GameObject noFire = null;
         private GameObject reloadSprite = null;
 
         private bool noSprite = false;
@@ -70,11 +71,21 @@ namespace Gameplay
             fireTimer += Time.deltaTime; //increment timers each frame
             reloadTimer += Time.deltaTime;
 
+            if(fireTimer >= fireTime && noFire != null)
+                Destroy(noFire);
+
             if(particles != null){
                 if(player.GetComponent<SpriteRenderer>().flipX){
                     particles.transform.position = new Vector2(player.transform.position[0] - 0.6f, player.transform.position[1] + 0.2f);
                 }else{
                     particles.transform.position = new Vector2(player.transform.position[0] + 0.8f, player.transform.position[1] + 0.2f);
+                }
+            }
+            if(noFire != null){
+                if(player.GetComponent<SpriteRenderer>().flipX){
+                    noFire.transform.position = new Vector2(player.transform.position[0] - 0.6f, player.transform.position[1] + 0.3f);
+                }else{
+                    noFire.transform.position = new Vector2(player.transform.position[0] + 0.8f, player.transform.position[1] + 0.3f);
                 }
             }
 
@@ -177,7 +188,7 @@ namespace Gameplay
                 fireTimer = 0;
                 Vector3 mousePos = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
                 ammo--;
-
+    
 
                 if(mousePos[0] <= transform.position.x){
                     if(!player.GetComponent<SpriteRenderer>().flipX){
@@ -195,6 +206,12 @@ namespace Gameplay
                 particles = Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1] + 0.2f), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
 
                 particles.transform.parent = player.transform;
+
+                noFire = Instantiate((GameObject)Resources.Load("noFire", typeof(GameObject)), new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1] + 0.3f), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+                noFire.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
+
+                noFire.transform.parent = player.transform;
 
                 if(!beam){
                     var angle = (mousePos - transform.position).normalized;
