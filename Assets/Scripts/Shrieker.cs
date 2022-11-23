@@ -144,7 +144,7 @@ public class Shrieker : MonoBehaviour
             //Debug.DrawLine(transform.position, point, Color.green);
 
             if(hit.collider != null)
-                if(hit.collider.gameObject.CompareTag("Player") || hit.collider.gameObject.GetComponent<ProjectileBehavior>() != null){
+                if(hit.collider.gameObject.CompareTag("Player") || hit.collider.gameObject.GetComponent<ProjectileBehavior>() != null || hit.collider.gameObject.name.ToString().Contains("explosion")){
             //        Debug.DrawLine(transform.position, hit.point, Color.yellow);
                     return true;
                 }
