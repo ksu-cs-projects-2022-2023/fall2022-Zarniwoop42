@@ -30,6 +30,8 @@ public class Shrieker : MonoBehaviour
 
     private Game game;
 
+    private bool death = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +49,10 @@ public class Shrieker : MonoBehaviour
     {
         timer += Time.deltaTime;
 
+        if(death && timer >= time){
+            Destroy(gameObject);
+        }
+
         if(jumping && timer >= time){
             jumping = false;
             if(sp.flipX){
@@ -59,9 +65,12 @@ public class Shrieker : MonoBehaviour
             }
         }
 
-        if(health <= 0){
+        if(health <= 0 && !death){
             game.points += 10;
-            Destroy(gameObject);
+            goo();
+            goo();
+            timer = 0;
+            die();
         }
 
         if(!jumping){
@@ -82,6 +91,12 @@ public class Shrieker : MonoBehaviour
             left = false;
         }
      
+    }
+
+    void die(){
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        gameObject.GetComponent<SpriteRenderer>().flipY = true;
+        death = true;
     }
 
     void ChasePlayer(){
@@ -159,14 +174,24 @@ public class Shrieker : MonoBehaviour
             if(o != null){
                 if(o.GetComponent<ProjectileBehavior>() != null){
                     health -= o.GetComponent<ProjectileBehavior>().damage;
+                    goo();
                 }else if(o.GetComponent<ExplosionBehavior>() != null){
                     health -= o.GetComponent<ExplosionBehavior>().damage;
+                    goo();
                 }
             }
         }catch(NullReferenceException e){
             Debug.Log(e.ToString());
         }
     }
+
+    void goo(){
+        var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        var goo2 = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        goo.transform.parent = transform;
+        goo2.transform.parent = transform;
+    }
+
 
     void OnCollisionEnter2D(Collision2D other) {
         if(other.collider.CompareTag("Player")){

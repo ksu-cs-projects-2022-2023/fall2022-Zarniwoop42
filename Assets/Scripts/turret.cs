@@ -194,8 +194,10 @@ public class turret : MonoBehaviour
                 if(o != null){
                     if(o.GetComponent<ProjectileBehavior>() != null){
                         health -= o.GetComponent<ProjectileBehavior>().damage;
-                    }else if(o.GetComponent<ExplosionBehavior>() != null){
+                        smoke();
+                    }else if(o.GetComponent<ExplosionBehavior>() != null && !o.name.ToString().Contains("laserblast")){
                         health -= o.GetComponent<ExplosionBehavior>().damage;
+                        smoke();
                     }
                 }
             }catch(NullReferenceException e){
@@ -203,6 +205,13 @@ public class turret : MonoBehaviour
             }
         }
         
+    }
+    
+    void smoke(){
+        var smoke = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        var smoke2 = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        smoke.transform.parent = transform;
+        smoke2.transform.parent = transform;
     }
 
 }
