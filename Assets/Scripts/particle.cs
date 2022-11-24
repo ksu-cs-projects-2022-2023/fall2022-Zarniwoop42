@@ -5,7 +5,7 @@ using UnityEngine;
 public class particle : MonoBehaviour
 {
 
-    private float particleTime = 0.5f;
+    public float particleTime = 0.5f;
     private float particleTimer;
 
     // Start is called before the first frame update
