@@ -23,14 +23,22 @@ public class printer : MonoBehaviour
     public Sprite[] Stock;
     [SerializeField]
     public GameObject Gun;
-
+    private GameObject prin;
 
     private bool printed = false;
     private GameObject player; 
+    public float time = 1f;
+    public float timer;
+    
+    public string SortingLayer;
+    public int OrderInLayer;
+
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        prin = gameObject.transform.parent.gameObject;
+        timer = Time.time;
         player = GameObject.Find("Player");
         game = GameObject.Find("Grid").GetComponent<Game>();
     }
@@ -38,15 +46,21 @@ public class printer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        timer += Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D other){
         Collider2D o = other;
         try{
-            if(o != null){
+            if(o != null && timer > time){
                 if(o.CompareTag("Player") && !printed){
                     weaponGen();
+
+                    DrawLine(new Vector2(prin.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), prin.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), new Vector2(player.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), player.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), UnityEngine.Random.Range(0.1f, 0.3f));
+                    DrawLine(new Vector2(prin.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), prin.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), new Vector2(player.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), player.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), UnityEngine.Random.Range(0.1f, 0.3f));
+                    DrawLine(new Vector2(prin.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), prin.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), new Vector2(player.transform.position[0] + UnityEngine.Random.Range(-0.01f, 0.01f), player.transform.position[1] + UnityEngine.Random.Range(-0.01f, 0.01f)), UnityEngine.Random.Range(0.1f, 0.3f));
+
+
                 }
             }
         }catch(NullReferenceException e){
@@ -54,11 +68,53 @@ public class printer : MonoBehaviour
         }
     }
 
+    void DrawLine(Vector3 start, Vector3 end, float duration = 0.5f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = new Vector3(start[0], start[1], 0);
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+
+        lr.sortingLayerName = SortingLayer;
+        lr.sortingOrder = OrderInLayer;
+        lr.material = new Material (Shader.Find ("Sprites/Default"));
+
+        Gradient gradient;
+        GradientColorKey[] colorKey;
+        GradientAlphaKey[] alphaKey;
+
+        gradient = new Gradient();
+
+        // Populate the color keys at the relative time 0 and 1 (0 and 100%)
+        colorKey = new GradientColorKey[2];
+        colorKey[0].color = Color.white;
+        colorKey[0].time = 0.5f;
+        colorKey[1].color = Color.yellow;
+        colorKey[1].time = 1.0f;
+
+        // Populate the alpha  keys at relative time 0 and 1  (0 and 100%)
+        alphaKey = new GradientAlphaKey[2];
+        alphaKey[0].alpha = 1.0f;
+        alphaKey[0].time = 0.5f;
+        alphaKey[1].alpha = 0.5f;
+        alphaKey[1].time = 1.0f;
+
+        gradient.SetKeys(colorKey, alphaKey);
+
+        lr.colorGradient = gradient;
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        GameObject.Destroy(myLine, duration);
+    }
+
+
 
     void weaponGen(){
 
         printed = true;
-
+       
         //FireRate * Trigger
         //AmmoNum * Clip
         //ReloadSpeed * Grip
@@ -73,7 +129,9 @@ public class printer : MonoBehaviour
 
         var pos = transform.position;
 
-        GameObject g = Instantiate(Gun, transform.position, new Quaternion(0,0,0,1));
+        Debug.Log("pos: " + prin.transform.position[0].ToString() + " , " + prin.transform.position[1].ToString());
+
+        GameObject g = Instantiate(Gun, prin.transform.position, new Quaternion(0,0,0,1));
         
         var t = new GameObject().AddComponent<SpriteRenderer>();
 
@@ -144,4 +202,5 @@ public class printer : MonoBehaviour
         g.transform.GetChild(0).GetComponent<GunDetails>().accuracy = 1 - (float)(stRand)/2f;
         g.transform.GetChild(0).GetComponent<GunDetails>().barrel = bRand;
     }
+
 }

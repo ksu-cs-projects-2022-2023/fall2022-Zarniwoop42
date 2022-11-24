@@ -46,7 +46,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0041553974, y: -0.018699557}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -57,7 +57,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.48056793, y: 0.43485767}
   m_EdgeRadius: 0
 --- !u!114 &1826532737064277512
 MonoBehaviour:
@@ -98,6 +98,10 @@ MonoBehaviour:
   - {fileID: 1314495350, guid: 5937da2df60a394439d22a0324c3a838, type: 3}
   - {fileID: 756308884, guid: 5937da2df60a394439d22a0324c3a838, type: 3}
   Gun: {fileID: 931016710473970454, guid: 5b4aed8973b26d144ad16f16163388a9, type: 3}
+  time: 1
+  timer: 0
+  SortingLayer: Weapon
+  OrderInLayer: 1
 --- !u!1 &8353543780640913811
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +177,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 632259765
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1186539703, guid: e490b71300156b444af8a938e8c33496, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

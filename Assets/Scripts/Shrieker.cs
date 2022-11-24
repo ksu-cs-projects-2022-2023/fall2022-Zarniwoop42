@@ -32,11 +32,16 @@ public class Shrieker : MonoBehaviour
 
     private bool death = false;
 
+    private float gootime = 0.3f;
+    private float gootimer;
+
+
     // Start is called before the first frame update
     void Start()
     {
         game = GameObject.Find("Grid").GetComponent<Game>();
         timer = Time.time;
+        gootimer = Time.time;
         player = GameObject.Find("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
@@ -48,6 +53,7 @@ public class Shrieker : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
+        gootimer += Time.deltaTime;
 
         if(death && timer >= time){
             Destroy(gameObject);
@@ -67,8 +73,6 @@ public class Shrieker : MonoBehaviour
 
         if(health <= 0 && !death){
             game.points += 10;
-            goo();
-            goo();
             timer = 0;
             die();
         }
@@ -96,6 +100,10 @@ public class Shrieker : MonoBehaviour
     void die(){
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         gameObject.GetComponent<SpriteRenderer>().flipY = true;
+        var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        var goo2 = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+        goo.transform.parent = transform;
+        goo2.transform.parent = transform;
         death = true;
     }
 
@@ -186,10 +194,13 @@ public class Shrieker : MonoBehaviour
     }
 
     void goo(){
-        var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
-        var goo2 = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
-        goo.transform.parent = transform;
-        goo2.transform.parent = transform;
+        if(gootimer >= gootime){
+            var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            var goo2 = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            goo.transform.parent = transform;
+            goo2.transform.parent = transform;
+        }
+        gootimer = 0;
     }
 
 

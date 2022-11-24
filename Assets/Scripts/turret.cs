@@ -10,8 +10,10 @@ public class turret : MonoBehaviour
     public int health = 1000;
     private Game game;
 
-    public float time;
-    public float timer;
+    private float time;
+    private float timer;
+    private float smoketime = 0.3f;
+    private float smoketimer;
 
     private float spawnTime = 60;
 
@@ -36,6 +38,7 @@ public class turret : MonoBehaviour
         game = GameObject.Find("Grid").GetComponent<Game>();
         timer = Time.time;
         time = UnityEngine.Random.Range(5f, spawnTime);
+        smoketimer = Time.time;
 
         box = gameObject.GetComponent<BoxCollider2D>();
 
@@ -131,6 +134,7 @@ public class turret : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        smoketimer += Time.deltaTime;
         timer += Time.deltaTime;
 
         float tRound = (float)Math.Round(timer, 1);
@@ -208,10 +212,13 @@ public class turret : MonoBehaviour
     }
     
     void smoke(){
-        var smoke = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
-        var smoke2 = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
-        smoke.transform.parent = transform;
-        smoke2.transform.parent = transform;
+        if(smoketimer >= smoketime){
+            var smoke = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            var smoke2 = Instantiate((GameObject)Resources.Load("smokeDamage", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            smoke.transform.parent = transform;
+            smoke2.transform.parent = transform;
+        }
+        smoketimer = 0;
     }
 
 }

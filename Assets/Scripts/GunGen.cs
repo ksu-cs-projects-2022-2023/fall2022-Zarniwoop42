@@ -36,12 +36,14 @@ namespace Gameplay
         private bool noSprite = false;
         private bool beam = false;
 
-
         void Start()
         {
             
             fireTimer = Time.time; //set timer initial values
             reloadTimer = Time.time;
+
+            if(transform.parent != null)
+               transform.localPosition = new Vector3(0, 0, 0);
 
             //set various useful links
             GD = transform.GetChild(0).GetComponent<GunDetails>();
@@ -163,13 +165,15 @@ namespace Gameplay
         void OnTriggerEnter2D(Collider2D other)
         {
             if(other.CompareTag("Player")){
-                Debug.Log(gameObject.ToString()); 
+                //Debug.Log(gameObject.ToString()); 
 
                 if(hr.primary == null && hr.secondary != gameObject){
                     pickUp(true);
                 }else if(hr.secondary == null && hr.primary != gameObject){
                     pickUp(false);
                 }
+                
+                
             }
         }
 
@@ -237,7 +241,7 @@ namespace Gameplay
 
                     DrawLine(new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]), hit.point);
                     var dis = Vector3.Distance(hit.point, origin);
-                    Debug.Log("Distance: " + dis.ToString());
+                    //Debug.Log("Distance: " + dis.ToString());
                     if(dis > 15)
                         dis = 15;
                     
