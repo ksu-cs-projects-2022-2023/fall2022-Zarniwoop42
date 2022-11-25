@@ -25,6 +25,10 @@ namespace Gameplay
         [SerializeField]
         public GameObject turret = null;
         [SerializeField]
+        public GameObject health = null;
+        [SerializeField]
+        public GameObject shieldPod = null;
+        [SerializeField]
         public GameObject Gun = null;
         public Sprite NailGun = null;
         public GameObject player = null;
@@ -32,12 +36,9 @@ namespace Gameplay
         public TextMeshProUGUI healthStat;
         [SerializeField]
         public TextMeshProUGUI ammoStat;
+        public TextMeshProUGUI stimUI;
         public List<Vector3> safeSpawns;
-
-        //public Image primarySlot;
         public Image secondarySlot;
-
-        //public GameObject primaryUI;
         public GameObject secondaryUI;
 
         private HitReg hr;
@@ -65,11 +66,14 @@ namespace Gameplay
             player.transform.position = safeSpawns[UnityEngine.Random.Range(0, safeSpawns.Count)]; 
 
             cam.transform.position = new Vector3(player.transform.position[0], player.transform.position[1], -10);
-
+            
+            Spawner.Spawn(health, safeSpawns, 5);
             Spawner.Spawn(Shrieker, safeSpawns, 4);
             Spawner.Spawn(printer, safeSpawns, 1);
             Spawner.Spawn(Gun, safeSpawns, 1);
             Spawner.Spawn(turret, safeSpawns, 2);
+            Spawner.Spawn(shieldPod, safeSpawns, 1);
+           
         }
 
         
@@ -114,6 +118,8 @@ namespace Gameplay
         private void Update() {
             if(player != null){
                 healthStat.text = hr.health.ToString();
+
+                stimUI.text = "x " + hr.stims.ToString();
                   
                 if(hr.primary != null){
                     ammoStat.enabled = true;

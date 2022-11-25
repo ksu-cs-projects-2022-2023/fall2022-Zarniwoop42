@@ -11,19 +11,31 @@ public class PlayerMovement : MonoBehaviour
     public bool moving = false; 
 
     public GameObject player;
+    public HitReg hr;
 
+    private float shieldtime = 5f;
+    private float shieldtimer;
 
     void Start()
     {
+        shieldtimer = Time.time;
         player = GameObject.Find("Player");
+        hr = player.transform.Find("HitReg").GetComponent<HitReg>();
+
     }
 
 
     // Update is called once per frame
     void Update()
-    {
-        if(player.transform.GetChild(1).GetComponent<HitReg>().allowInput)
+    {        
+        shieldtimer += Time.deltaTime;
+        if(hr.allowInput)
             ProcessInputs();
+        
+       if(hr.shieldActive && shieldtimer >= shieldtime){
+            hr.shieldActive = false;
+            shieldtimer = -10;
+       } 
     }
 
     void FixedUpdate()
@@ -41,6 +53,18 @@ public class PlayerMovement : MonoBehaviour
 
     void ProcessInputs()
     {
+        if(Input.GetKeyDown(KeyCode.E) && hr.stims > 0 && hr.health < 100){
+            hr.health += 20;
+            hr.stims--;
+            if(hr.health > 100)
+                hr.health = 100;
+        }
+        if(Input.GetKeyDown(KeyCode.Space) && hr.shieldEquip && shieldtimer > shieldtime){
+            hr.shieldActive = true;
+            shieldtimer = 0;
+
+        }
+        
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
