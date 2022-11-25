@@ -22,6 +22,7 @@ public class HitReg : MonoBehaviour
     public Image heal;
     public Image shield;
     public Image shieldPod;
+    public Image noShield;
 
     public float time = 0.3f;
     public float hurttimer;
@@ -29,6 +30,9 @@ public class HitReg : MonoBehaviour
     public float shieldtimer;
     public bool shieldEquip = false;
     public bool shieldActive = false;
+	private int index = 0;
+    private int frame = 0;
+    public Sprite[] sprites;
 
     void OnTriggerEnter2D(Collider2D other){
         Collider2D o = other;
@@ -55,12 +59,22 @@ public class HitReg : MonoBehaviour
         }
 
         if(shieldActive){
-            shieldPod.GetComponent<Animator>().enabled = true;
+            if (index != sprites.Length){ //inspiration from: https://gist.github.com/almirage/e9e4f447190371ee6ce9
+                frame ++;
+                if (frame >= 6){
+                    shieldPod.GetComponent<Image>().sprite = sprites[index];
+                    frame = 0;
+                    index ++;
+                    if (index >= sprites.Length) {
+                        index = 0;
+                    }
+                }
+            }
         }else{
-            shieldPod.GetComponent<Animator>().enabled = false;
+            shieldPod.GetComponent<Image>().sprite = sprites[0];
         }
 
-        if(health <= 0){
+        if(health <= 0 && !shieldActive){
             allowInput = false;
         }else{
 
@@ -110,5 +124,6 @@ public class HitReg : MonoBehaviour
         shieldtimer = Time.time;
         healthUpdate = health;
         allowInput = true;
+        noShield.GetComponent<Image>().enabled = false;
     }
 }

@@ -135,7 +135,7 @@ namespace Gameplay
                     if(secondaryUI != null)
                         Destroy(secondaryUI);
                 }
-                if(hr.health <= 0){
+                if(hr.health <= 0 && !hr.shieldActive){
                     GameOver();
                 }
             }

@@ -35,7 +35,10 @@ public class PlayerMovement : MonoBehaviour
        if(hr.shieldActive && shieldtimer >= shieldtime){
             hr.shieldActive = false;
             shieldtimer = -10;
-       } 
+            hr.noShield.enabled = true;
+       }else if(hr.shieldEquip && shieldtimer >= shieldtime){
+            hr.noShield.enabled = false;
+       }
     }
 
     void FixedUpdate()
