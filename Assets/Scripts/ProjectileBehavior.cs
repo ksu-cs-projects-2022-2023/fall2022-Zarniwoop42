@@ -64,7 +64,7 @@ public class ProjectileBehavior : MonoBehaviour
 
                     //Debug.DrawLine(transform.position, point, Color.green);
 
-                    RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action2")) |(1 << LayerMask.NameToLayer("Action")) );
+                    RaycastHit2D hit = Physics2D.Linecast(transform.position, point, (1 << LayerMask.NameToLayer("Action2")) |(1 << LayerMask.NameToLayer("Action")) | LayerMask.NameToLayer("Hatch") );
 
                     Debug.DrawLine(transform.position, point, Color.green);
 
@@ -124,7 +124,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other){
-        if(!other.CompareTag("Player") && !other.CompareTag("Weapon") && !other.CompareTag("Printer")){
+        if(!other.CompareTag("Player") && !other.CompareTag("Weapon") && !other.CompareTag("Printer") && !other.CompareTag("Hatch")){
             Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(transform.position[0], transform.position[1]), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
             if(barrel == 0)
                 explode();

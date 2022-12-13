@@ -10,9 +10,9 @@ public class DeathScreen : MonoBehaviour
 {
 
     public TextMeshProUGUI pointsText;
-    public void Setup(int score){
+    public void Setup(int score, int floor){
         gameObject.SetActive(true);
-        pointsText.text = score.ToString() + " points";
+        pointsText.text = score.ToString() + " points | floor " + floor.ToString();
     }
 
     public void PlayGame(){

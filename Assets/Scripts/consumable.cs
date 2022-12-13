@@ -32,13 +32,16 @@ public class consumable : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player")){
-            if(gameObject.name.ToString().Contains("health"))
-                hr.stims++;
-            else if(gameObject.name.ToString().Contains("shieldPod"))
-                hr.shieldEquip = true;
-            AS.PlayOneShot(hr.pickup, 0.4F);
-            
-            Destroy(gameObject);
+            try{
+                if(gameObject.name.ToString().Contains("health"))
+                    hr.stims++;
+                else if(gameObject.name.ToString().Contains("shieldPod"))
+                    hr.shieldEquip = true;
+                AS.PlayOneShot(hr.pickup, 0.4F);
+                
+                Destroy(gameObject);
+            }catch(Exception){};
+         
         }
     }
 }

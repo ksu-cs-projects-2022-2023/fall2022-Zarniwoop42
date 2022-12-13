@@ -66,6 +66,12 @@ public class HitReg : MonoBehaviour
             shieldPod.GetComponent<Image>().enabled = false;
         }
 
+        if(Physics2D.IsTouching(GetComponent<Collider2D>(), GameObject.FindGameObjectsWithTag("Hatch")[0].GetComponent<Collider2D>())){
+            if(GameObject.Find("Grid").GetComponent<Game>().unlocked && Input.GetKeyDown(KeyCode.E)){
+                GameObject.Find("Grid").GetComponent<Game>().newRoom();
+            }
+        }
+
         if(shieldActive){
             if (index != sprites.Length){ //inspiration from: https://gist.github.com/almirage/e9e4f447190371ee6ce9
                 frame ++;

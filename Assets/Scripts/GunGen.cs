@@ -204,6 +204,7 @@ namespace Gameplay
 
         void OnTriggerEnter2D(Collider2D other)
         {
+            try{
             if(other.CompareTag("Player")){
                 //Debug.Log(gameObject.ToString()); 
 
@@ -211,10 +212,9 @@ namespace Gameplay
                     pickUp(true);
                 }else if(hr.secondary == null && hr.primary != gameObject){
                     pickUp(false);
-                }
-                
-                
+                }    
             }
+            }catch(Exception){};
         }
 
 

@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a453edc37a91c0b498a6510a1f87e4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 400
   state: 0
   anim: {fileID: 0}
   SortingLayer: Laser

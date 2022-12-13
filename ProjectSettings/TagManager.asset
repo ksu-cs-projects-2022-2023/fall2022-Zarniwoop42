@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Death
   - Printer
+  - Hatch
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Action
   - Action2
   - ProjAction
-  - 
+  - Hatch
   - 
   - 
   - 

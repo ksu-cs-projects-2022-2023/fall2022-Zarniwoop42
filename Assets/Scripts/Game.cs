@@ -29,6 +29,8 @@ namespace Gameplay
         [SerializeField]
         public GameObject shieldPod = null;
         [SerializeField]
+        public GameObject hatch = null;
+        [SerializeField]
         public GameObject Gun = null;
         public Sprite NailGun = null;
         public GameObject player = null;
@@ -43,6 +45,13 @@ namespace Gameplay
         public AudioClip explosionSound;
         public AudioClip bulletImpactSound;
         public AudioClip energyImpactSound;
+        public Sprite hatchOpen;
+        public bool unlocked = false;
+
+        private float floortime = 40f;
+        private float floorTimer;
+
+        public int floor = 1;
 
         private HitReg hr;
 
@@ -58,25 +67,78 @@ namespace Gameplay
             cam = GameObject.Find("Main Camera").GetComponent<Camera>();
             player = GameObject.Find("Player");
 
-            g.Generate();
+            newRoom();
+           
+        }
+
+        void killAll(){
+            foreach(GameObject i in GameObject.FindGameObjectsWithTag("Hatch")){
+                Destroy(i);
+            }
+            foreach(GameObject i in GameObject.FindGameObjectsWithTag("Weapon")){
+                if(i.transform.parent == null)
+                    Destroy(i);
+            }foreach(GameObject i in GameObject.FindGameObjectsWithTag("Enemy")){
+                Destroy(i);
+            }
+            foreach(GameObject i in GameObject.FindGameObjectsWithTag("Item")){
+                Destroy(i);
+            }foreach(GameObject i in GameObject.FindGameObjectsWithTag("Printer")){
+                Destroy(i);
+            }
+        }
+
+        public void newRoom(){
+            unlocked = false;
+            safeSpawns = new List<Vector3>();
+
+            killAll();
+
+            if(floor == 1){
+                floorTimer = floortime;
+            }else{
+                floorTimer = 0;
+                floortime = 10 + floor * 3;
+            }
+
+
+            int w = UnityEngine.Random.Range(10, floor * 10);
+            int h = UnityEngine.Random.Range(10, floor * 10);
+
+            g.Generate(w, h, UnityEngine.Random.Range(w*h/4, w*h));
 
             GridCell<bool>[] validSpawns = g.validSpawns;
 
             foreach(GridCell<bool> e in validSpawns){
-                safeSpawns.Add(new Vector3((int.Parse((e.X).ToString()))* 1.28f + 0.2f * 1.28f, ((int.Parse((e.Y).ToString())) + (0.5f * 1.28f)) * 1.28f));
+                safeSpawns.Add(new Vector3(e.X * 1.28f + 0.5f * 1.28f, e.Y * 1.28f + 0.5f * 1.28f));
             }
 
             player.transform.position = safeSpawns[UnityEngine.Random.Range(0, safeSpawns.Count)]; 
 
             cam.transform.position = new Vector3(player.transform.position[0], player.transform.position[1], -10);
+
+
             
-            Spawner.Spawn(health, safeSpawns, 5);
-            Spawner.Spawn(Shrieker, safeSpawns, 1);
-            Spawner.Spawn(printer, safeSpawns, 2);
-            Spawner.Spawn(Gun, safeSpawns, 1);
-            Spawner.Spawn(turret, safeSpawns, 1);
-            Spawner.Spawn(shieldPod, safeSpawns, 1);
-           
+            Spawner.Spawn(hatch, safeSpawns, 1);
+            Spawner.Spawn(health, safeSpawns, UnityEngine.Random.Range(0, 1 + (int)(floor/2)));
+
+            if(floor != 1){
+
+                Spawner.Spawn(Shrieker, safeSpawns, UnityEngine.Random.Range(1, 1 + (int)(floor/2)));
+                if(UnityEngine.Random.Range(0, 1 + (int)(5/floor)) == 1)
+                    Spawner.Spawn(Gun, safeSpawns, UnityEngine.Random.Range(1, 1 + (int)(floor/4)));
+                Spawner.Spawn(turret, safeSpawns, UnityEngine.Random.Range(0, 1 + (int)(floor/4)));
+            }else{
+                Spawner.Spawn(Gun, safeSpawns, 1);
+            }
+
+            if(UnityEngine.Random.Range(0, 1 + (int)(50/floor)) == 1){
+                Spawner.Spawn(shieldPod, safeSpawns, 1);
+            }
+            if(UnityEngine.Random.Range(0, 1 + (int)(10/floor)) == 1){
+                Spawner.Spawn(printer, safeSpawns, 1);
+            }
+            floor++;
         }
 
         
@@ -120,6 +182,13 @@ namespace Gameplay
 
         private void Update() {
             if(player != null){
+                floorTimer += Time.deltaTime;
+
+                if(floorTimer >= floortime || GameObject.FindGameObjectsWithTag("Enemy").Length == 0){
+                    GameObject.FindGameObjectsWithTag("Hatch")[0].GetComponent<SpriteRenderer>().sprite = hatchOpen;
+                    unlocked = true;
+                }
+
                 healthStat.text = hr.health.ToString();
 
                 stimUI.text = "x " + hr.stims.ToString();
@@ -148,7 +217,7 @@ namespace Gameplay
         public void GameOver(){
             healthStat.enabled = false;
             ammoStat.enabled = false;
-            deathScreen.Setup(points);
+            deathScreen.Setup(points, floor - 2);
         }
 
     }

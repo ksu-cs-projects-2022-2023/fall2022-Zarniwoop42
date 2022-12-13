@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ProcessInputs()
     {
-        if(Input.GetKeyDown(KeyCode.E) && hr.stims > 0 && hr.health < 100){
+        if(Input.GetKeyDown(KeyCode.Q) && hr.stims > 0 && hr.health < 100){
             hr.health += 20;
             hr.stims--;
             if(hr.health > 100)

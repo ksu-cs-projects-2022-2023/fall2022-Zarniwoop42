@@ -24,22 +24,22 @@ namespace Gameplay
         [SerializeField]
         private TileBase[] _spaceTiles;
         [SerializeField]
-        private int _maxWidth;
+        private int _maxWidth = 10;
         [SerializeField]
-        private int _maxHeight;
+        private int _maxHeight = 10;
 
         [SerializeField]
-        private int _cellsToRemove;
+        private int _cellsToRemove = 50;
 
         public GridCell<bool>[] validSpawns;
 
         public SpaceStationBuilding station;
 
         [ContextMenu("Generate Station")]
-        public void Generate()
+        public void Generate(int mW, int mH, int cR)
         {
             station = 
-                new SpaceStationBuilding(_maxWidth, _maxHeight)
+                new SpaceStationBuilding(mW, mH)
                 .CarveHalls(_cellsToRemove)
                 .Shrink();
             _wallsTilemap.ClearAllTiles();
