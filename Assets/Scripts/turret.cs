@@ -27,11 +27,20 @@ public class turret : MonoBehaviour
     public int OrderInLayer;
 
     private GameObject player;
+    private float steptime = 0.05f;
+    private float steptimer;
+    public List<AudioClip> ACS;
+
+    public AudioClip hurt;
+    public AudioClip up;
+    public AudioClip down;
 
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
+        steptimer = Time.time;
+
         player = GameObject.Find("Player");
         transform.position = new Vector3(transform.position[0], transform.position[1], 1);
 
@@ -75,18 +84,31 @@ public class turret : MonoBehaviour
         DrawLine(transform.position, S.point);
         W = Physics2D.Raycast(transform.position, (transform.position - new Vector3(xCordW,yCordW, 0)).normalized, Mathf.Infinity, (1 << LayerMask.NameToLayer("Action")) );
         DrawLine(transform.position, W.point);
+        if(steptimer >= steptime){
+            PlayAudio();
+            steptimer = 0;
+        }
+        
 
         if(N.transform.name.ToString().Contains("Player")){
             Instantiate((GameObject)Resources.Load("laserblast", typeof(GameObject)), N.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            GetComponent<AudioSource>().PlayOneShot(hurt, 0.1F);
+
         }
         if(E.transform.name.ToString().Contains("Player")){
             Instantiate((GameObject)Resources.Load("laserblast", typeof(GameObject)), E.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            GetComponent<AudioSource>().PlayOneShot(hurt, 0.1F);
+
         }
         if(S.transform.name.ToString().Contains("Player")){
             Instantiate((GameObject)Resources.Load("laserblast", typeof(GameObject)), S.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            GetComponent<AudioSource>().PlayOneShot(hurt, 0.1F);
+
         }
         if(W.transform.name.ToString().Contains("Player")){
             Instantiate((GameObject)Resources.Load("laserblast", typeof(GameObject)), W.point, new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            GetComponent<AudioSource>().PlayOneShot(hurt, 0.1F);
+
         }
     }
 
@@ -136,6 +158,8 @@ public class turret : MonoBehaviour
     {
         smoketimer += Time.deltaTime;
         timer += Time.deltaTime;
+        steptimer += Time.deltaTime;
+
 
         float tRound = (float)Math.Round(timer, 1);
 
@@ -162,10 +186,14 @@ public class turret : MonoBehaviour
                 state = 1;
                 anim.SetBool("despawn", false);
                 anim.SetBool("spawn", true);
+                GetComponent<AudioSource>().PlayOneShot(up, 0.7F);
+
             }else if(state == 1){
                 state = 0;
                 anim.SetBool("spawn", false);
                 anim.SetBool("despawn", true);
+                GetComponent<AudioSource>().PlayOneShot(down, 0.7F);
+
             }
         }
 
@@ -176,6 +204,13 @@ public class turret : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+
+
+    void PlayAudio(){
+        GetComponent<AudioSource>().PlayOneShot(ACS[0], 0.1F);
+
     }
 
     void explode(){

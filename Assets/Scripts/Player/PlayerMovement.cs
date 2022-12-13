@@ -15,13 +15,20 @@ public class PlayerMovement : MonoBehaviour
 
     private float shieldtime = 5f;
     private float shieldtimer;
-
+    private float steptime = 0.3f;
+    private float steptimer;
+    private float shieldsteptime = 0.3f;
+    private float shieldsteptimer;
+    public List<AudioClip> ACS;
+    public AudioClip shield;
+    private int step = 0;
     void Start()
     {
         shieldtimer = Time.time;
+        steptimer = Time.time;
+        shieldsteptimer = Time.time;
         player = GameObject.Find("Player");
         hr = player.transform.Find("HitReg").GetComponent<HitReg>();
-
     }
 
 
@@ -29,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {        
         shieldtimer += Time.deltaTime;
+        steptimer += Time.deltaTime;
+        shieldsteptimer += Time.deltaTime;
         if(hr.allowInput)
             ProcessInputs();
         
@@ -38,6 +47,10 @@ public class PlayerMovement : MonoBehaviour
             hr.noShield.enabled = true;
        }else if(hr.shieldEquip && shieldtimer >= shieldtime){
             hr.noShield.enabled = false;
+       }
+       if(hr.shieldActive && shieldsteptimer >= shieldsteptime){
+            GetComponent<AudioSource>().PlayOneShot(shield, 0.1F);
+            shieldsteptimer = 0;
        }
     }
 
@@ -52,6 +65,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void turnRight(GameObject p){
         p.GetComponent<SpriteRenderer>().flipX = true;
+    }
+
+    
+    void PlayAudio(){
+        GetComponent<AudioSource>().PlayOneShot(ACS[step], 0.3F);
+        step++;
+        if(step >= ACS.Count)
+            step = 0;
     }
 
     void ProcessInputs()
@@ -74,6 +95,10 @@ public class PlayerMovement : MonoBehaviour
         if(moveX != 0 || moveY != 0){
             GetComponent<Animator>().enabled = true;
             GetComponent<Animator>().Play("spacewalk");
+            if(steptimer >= steptime){
+                steptimer = 0;
+                PlayAudio();
+            }
         }else{
             GetComponent<Animator>().enabled = false;
         }

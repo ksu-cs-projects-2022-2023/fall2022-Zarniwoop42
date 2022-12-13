@@ -40,6 +40,9 @@ namespace Gameplay
         public List<Vector3> safeSpawns;
         public Image secondarySlot;
         public GameObject secondaryUI;
+        public AudioClip explosionSound;
+        public AudioClip bulletImpactSound;
+        public AudioClip energyImpactSound;
 
         private HitReg hr;
 
@@ -68,10 +71,10 @@ namespace Gameplay
             cam.transform.position = new Vector3(player.transform.position[0], player.transform.position[1], -10);
             
             Spawner.Spawn(health, safeSpawns, 5);
-            Spawner.Spawn(Shrieker, safeSpawns, 4);
-            Spawner.Spawn(printer, safeSpawns, 1);
+            Spawner.Spawn(Shrieker, safeSpawns, 1);
+            Spawner.Spawn(printer, safeSpawns, 2);
             Spawner.Spawn(Gun, safeSpawns, 1);
-            Spawner.Spawn(turret, safeSpawns, 2);
+            Spawner.Spawn(turret, safeSpawns, 1);
             Spawner.Spawn(shieldPod, safeSpawns, 1);
            
         }

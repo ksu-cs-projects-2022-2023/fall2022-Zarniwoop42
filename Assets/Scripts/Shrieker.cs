@@ -13,7 +13,6 @@ public class Shrieker : MonoBehaviour
     private Animator animator;
     private SpriteRenderer sp;
     private Vector3 directionToTarget;
-
     public float moveSpeed = 4;
     public float agroRange = 6;
 
@@ -35,6 +34,10 @@ public class Shrieker : MonoBehaviour
     private float gootime = 0.3f;
     private float gootimer;
 
+    public List<AudioClip> ACS;
+
+    public AudioClip deathSound;
+
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +49,6 @@ public class Shrieker : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         sp = gameObject.GetComponent<SpriteRenderer>();
-        
     }
 
     // Update is called once per frame
@@ -98,6 +100,7 @@ public class Shrieker : MonoBehaviour
     }
 
     void die(){
+        GetComponent<AudioSource>().PlayOneShot(deathSound, 0.7F);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         gameObject.GetComponent<SpriteRenderer>().flipY = true;
         var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
@@ -105,6 +108,11 @@ public class Shrieker : MonoBehaviour
         goo.transform.parent = transform;
         goo2.transform.parent = transform;
         death = true;
+    }
+
+    void PlayAudio(){
+        if (!GetComponent<AudioSource>().isPlaying)
+            GetComponent<AudioSource>().PlayOneShot(ACS[UnityEngine.Random.Range(0, ACS.Count)], 0.7F);
     }
 
     void ChasePlayer(){
@@ -138,6 +146,7 @@ public class Shrieker : MonoBehaviour
         var speed = rb.velocity.magnitude * 5;
 
         rb.velocity = direction * MathF.Max(speed, 0f);
+        PlayAudio();
     }
 
 
@@ -201,6 +210,7 @@ public class Shrieker : MonoBehaviour
             goo2.transform.parent = transform;
         }
         gootimer = 0;
+        PlayAudio();
     }
 
 

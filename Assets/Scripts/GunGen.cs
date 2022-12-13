@@ -35,12 +35,29 @@ namespace Gameplay
 
         private bool noSprite = false;
         private bool beam = false;
+        private AudioSource AS;
+
+        public AudioClip shot;
+        public AudioClip cannon;
+        public AudioClip missile;
+        public AudioClip energy;
+        public AudioClip laser;
+        public AudioClip nail;
+        public AudioClip energyReload;
+        public AudioClip bulletReload;
+        public AudioClip cannonReload;
+        public AudioClip laserReload;
+        public AudioClip missileReload;
+        public AudioClip nailReload;
+        private float reloadAudioTime = 0.3f;
+        private float reloadAudioTimer;
 
         void Start()
         {
-            
+            AS = GetComponent<AudioSource>();
             fireTimer = Time.time; //set timer initial values
             reloadTimer = Time.time;
+            reloadAudioTimer = Time.time;
 
             if(transform.parent != null)
                transform.localPosition = new Vector3(0, 0, 0);
@@ -73,6 +90,7 @@ namespace Gameplay
         {
             fireTimer += Time.deltaTime; //increment timers each frame
             reloadTimer += Time.deltaTime;
+            reloadAudioTimer += Time.deltaTime;
 
             if(fireTimer >= fireTime && noFire != null)
                 Destroy(noFire);
@@ -90,6 +108,26 @@ namespace Gameplay
                 }else{
                     noFire.transform.position = new Vector2(player.transform.position[0] + 0.8f, player.transform.position[1] + 0.3f);
                 }
+            }
+
+            if(reloading){
+                if(reloadAudioTimer >= reloadAudioTime){
+                    reloadAudioTimer = 0;
+                    if(GD.barrel == 4){
+                        AS.PlayOneShot(bulletReload, 0.4F);
+                    }else if(GD.barrel == 0){
+                        AS.PlayOneShot(cannonReload, 0.1F);
+                    }else if(GD.barrel == 1){
+                        AS.PlayOneShot(missileReload, 0.1F);
+                    }else if(GD.barrel == 2){
+                        AS.PlayOneShot(energyReload, 0.3F);
+                    }else if(GD.barrel == 3){
+                        AS.PlayOneShot(laserReload, 0.1F);
+                    }else{
+                        AS.PlayOneShot(nailReload, 0.3F);
+                    }
+                }
+
             }
 
             if(hr.primary == gameObject){ //check this weapon equipped
@@ -139,6 +177,8 @@ namespace Gameplay
 
 
         void pickUp(bool prim){
+
+            player.GetComponent<AudioSource>().PlayOneShot(hr.pickup, 0.4F);
 
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
@@ -232,6 +272,17 @@ namespace Gameplay
                     }
                     
                     Instantiate(projectile, new Vector2(player.transform.position[0] + particleOffset, player.transform.position[1]), Quaternion.Euler(0, 0, deg));
+                    if(GD.barrel == 4){
+                        AS.PlayOneShot(shot, 0.3F);
+                    }else if(GD.barrel == 0){
+                        AS.PlayOneShot(cannon, 0.3F);
+                    }else if(GD.barrel == 1){
+                        AS.PlayOneShot(missile, 0.3F);
+                    }else if(GD.barrel == 2){
+                        AS.PlayOneShot(energy, 0.3F);
+                    }else{
+                        AS.PlayOneShot(nail, 0.3F);
+                    }
                 }else{
                     Vector2 point = new Vector2(mousePos[0] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy), mousePos[1] + UnityEngine.Random.Range(-GD.accuracy, GD.accuracy));
                     Vector2 origin = new Vector2(player.transform.position[0] + particleOffset/1.6f, player.transform.position[1]);
@@ -245,6 +296,7 @@ namespace Gameplay
                     if(dis > 15)
                         dis = 15;
                     
+                    AS.PlayOneShot(laser, 0.3F);
                     
                     for(int i = 5; i < ((16 - dis)/5) * ((1 + GD.distance)*2); i += 4){
                         Instantiate((GameObject)Resources.Load("explosion", typeof(GameObject)), new Vector3(hit.point[0] + UnityEngine.Random.Range(-0.5f, 0.5f), hit.point[1] + UnityEngine.Random.Range(-0.5f, 0.5f), 0), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));

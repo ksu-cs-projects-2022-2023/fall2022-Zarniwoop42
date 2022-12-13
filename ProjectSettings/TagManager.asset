@@ -48,8 +48,17 @@ TagManager:
   - name: Ground
     uniqueID: 1454219697
     locked: 0
+  - name: Laser
+    uniqueID: 1608563397
+    locked: 0
+  - name: Explosion
+    uniqueID: 2685675069
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Goo
+    uniqueID: 631698345
     locked: 0
   - name: Printer
     uniqueID: 2658206797

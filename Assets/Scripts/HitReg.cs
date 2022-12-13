@@ -34,6 +34,14 @@ public class HitReg : MonoBehaviour
     private int frame = 0;
     public Sprite[] sprites;
 
+    private AudioSource AS;
+
+    public AudioClip pain;
+    public AudioClip block;
+    public AudioClip healSound;
+    public AudioClip pickup;
+    public AudioClip swap;
+
     void OnTriggerEnter2D(Collider2D other){
         Collider2D o = other;
         if(o != null){
@@ -90,10 +98,12 @@ public class HitReg : MonoBehaviour
                     healthUpdate = health;
                     hurttimer = 0;
                     hurt.enabled = true;
+                    AS.PlayOneShot(pain, 0.3F);
                 }else{
                     health = healthUpdate;
                     shieldtimer = 0;
                     shield.enabled = true;
+                    AS.PlayOneShot(block, 0.3F);
                 }
             }
 
@@ -101,6 +111,7 @@ public class HitReg : MonoBehaviour
                 healthUpdate = health;
                 healtimer = 0;
                 heal.enabled = true;
+                AS.PlayOneShot(healSound, 0.3F);
             }else if (heal.enabled && healtimer > time){
                 heal.enabled = false;
             }
@@ -115,10 +126,13 @@ public class HitReg : MonoBehaviour
             var temp = primary;
             primary = secondary;
             secondary = temp;
+            AS.PlayOneShot(swap, 0.3F);
         }
     }
 
     private void Start() {
+        AS = GameObject.Find("Player").GetComponent<AudioSource>();
+
         hurttimer = Time.time;
         healtimer = Time.time;
         shieldtimer = Time.time;

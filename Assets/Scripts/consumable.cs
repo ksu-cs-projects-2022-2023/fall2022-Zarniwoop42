@@ -11,12 +11,13 @@ public class consumable : MonoBehaviour
     private HitReg hr;
     private GameObject player;
     
-    
+    private AudioSource AS;
     
     private Vector3 star;
     void Start()
     {            
         player = GameObject.Find("Player");
+        AS = player.GetComponent<AudioSource>();
         hr = player.transform.Find("HitReg").GetComponent<HitReg>();
         timer = Time.time + UnityEngine.Random.Range(-4f,4f);
         star = transform.position;
@@ -35,6 +36,8 @@ public class consumable : MonoBehaviour
                 hr.stims++;
             else if(gameObject.name.ToString().Contains("shieldPod"))
                 hr.shieldEquip = true;
+            AS.PlayOneShot(hr.pickup, 0.4F);
+            
             Destroy(gameObject);
         }
     }

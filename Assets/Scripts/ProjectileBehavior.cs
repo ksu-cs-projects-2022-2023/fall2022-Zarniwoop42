@@ -16,13 +16,20 @@ public class ProjectileBehavior : MonoBehaviour
     private float distance = 0;
     private float distanceTimer;
 
+    private float balltime = 0.2f;
+    private float ballTimer;
+    public AudioClip energy;
+
+
     private int barrel;
     private GunDetails GD;
+    private GameObject game;
 
     private void Start(){
         GD = GameObject.Find("Player").transform.Find("HitReg").GetComponent<HitReg>().primary.transform.GetChild(0).GetComponent<GunDetails>();
-
+        game = GameObject.Find("Grid");
         distanceTimer = 0;
+        ballTimer = 0;
         accuracy = GD.accuracy;
         distance = GD.distance;
 
@@ -38,6 +45,11 @@ public class ProjectileBehavior : MonoBehaviour
         float distAdjust = 0;
         if(GD.noSprite){
             if(barrel == 2){ //Energy ball
+                ballTimer += Time.deltaTime;
+                if(ballTimer >= balltime){
+                    GetComponent<AudioSource>().PlayOneShot(energy, 0.1F);
+                    ballTimer = 0;
+                }
                 distAdjust = 4;
                 mousePos = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
                 directionToTarget = ((new Vector3(mousePos[0] + UnityEngine.Random.Range(-accuracy, accuracy), mousePos[1] + UnityEngine.Random.Range(-accuracy, accuracy), 0)) - transform.position).normalized;
@@ -79,12 +91,12 @@ public class ProjectileBehavior : MonoBehaviour
         rb.velocity = new Vector2(directionToTarget.x * moveSpeed, directionToTarget.y * moveSpeed).normalized * moveSpeed;
 
         if(distanceTimer >= distance + distAdjust){
-           Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(transform.position[0], transform.position[1]), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(transform.position[0], transform.position[1]), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
            
-           if(barrel == 0)
+            if(barrel == 0)
                 explode();
-            
-           Destroy(gameObject);
+            exitSound();
+            Destroy(gameObject);
         }
     }
 
@@ -99,12 +111,25 @@ public class ProjectileBehavior : MonoBehaviour
         }
     }
 
+    void exitSound(){
+        if(barrel == 0){
+            game.GetComponent<AudioSource>().PlayOneShot(game.GetComponent<Game>().explosionSound, 0.7F);
+        }else if(barrel == 1){
+            game.GetComponent<AudioSource>().PlayOneShot(game.GetComponent<Game>().explosionSound, 0.2F);
+        }else if(barrel == 2){
+            game.GetComponent<AudioSource>().PlayOneShot(game.GetComponent<Game>().energyImpactSound, 0.3F);
+        }else{
+            game.GetComponent<AudioSource>().PlayOneShot(game.GetComponent<Game>().bulletImpactSound, 0.3F);
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other){
         if(!other.CompareTag("Player") && !other.CompareTag("Weapon") && !other.CompareTag("Printer")){
-           Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(transform.position[0], transform.position[1]), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
+            Instantiate((GameObject)Resources.Load("smoke", typeof(GameObject)), new Vector2(transform.position[0], transform.position[1]), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
             if(barrel == 0)
                 explode();
-           Destroy(gameObject);
+            exitSound();
+            Destroy(gameObject);
         }
     }
 }
