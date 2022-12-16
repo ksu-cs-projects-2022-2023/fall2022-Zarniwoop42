@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 544, y: -179}
+  m_AnchoredPosition: {x: 544, y: -221}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &33087596
@@ -2597,7 +2597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 525, y: -119}
+  m_AnchoredPosition: {x: 525, y: -161}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1770350522
@@ -2697,8 +2697,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "walk \t\t\t- \tWASD\n\nfire weapon \t-\tLMB\npickup weapon -\tE\ndrop
-    weapon\t-\tQ\nswap weapons\t-\tF\n\nopen hatch \t- \tE\n\nuse heal\t\t-\t1\nuse
-    shield\t\t-\t2"
+    weapon\t-\tQ\nreload\t\t-\tR\nswap weapons\t-\tF\n\nopen hatch \t- \tE\n\nuse
+    heal\t\t-\t1\nuse shield\t\t-\t2"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 582e7c560b4513c4db5a487d8c8dbcc5, type: 2}
   m_sharedMaterial: {fileID: -4077611178653561742, guid: 582e7c560b4513c4db5a487d8c8dbcc5, type: 2}

@@ -100,7 +100,7 @@ public class Shrieker : MonoBehaviour
     }
 
     void die(){
-        GetComponent<AudioSource>().PlayOneShot(deathSound, 0.7F);
+        GetComponent<AudioSource>().PlayOneShot(deathSound, 0.2F);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         gameObject.GetComponent<SpriteRenderer>().flipY = true;
         var goo = Instantiate((GameObject)Resources.Load("goo", typeof(GameObject)), new Vector2(transform.position[0] + UnityEngine.Random.Range(-0.2f,0.2f), transform.position[1] + UnityEngine.Random.Range(-0.2f,0.2f)), new Quaternion(0,0,0,UnityEngine.Random.Range(0, 360)));
@@ -112,7 +112,7 @@ public class Shrieker : MonoBehaviour
 
     void PlayAudio(){
         if (!GetComponent<AudioSource>().isPlaying)
-            GetComponent<AudioSource>().PlayOneShot(ACS[UnityEngine.Random.Range(0, ACS.Count)], 0.7F);
+            GetComponent<AudioSource>().PlayOneShot(ACS[UnityEngine.Random.Range(0, ACS.Count)], 0.2F);
     }
 
     void ChasePlayer(){

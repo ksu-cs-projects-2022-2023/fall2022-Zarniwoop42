@@ -15,7 +15,7 @@ public class turret : MonoBehaviour
     private float smoketime = 0.3f;
     private float smoketimer;
 
-    private float spawnTime = 60;
+    private float spawnTime = 20;
 
     public int state = 0;
 
