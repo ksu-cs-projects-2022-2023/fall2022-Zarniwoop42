@@ -136,7 +136,7 @@ namespace Gameplay
 
             
             Spawner.Spawn(hatch, safeSpawns, 1);
-            Spawner.Spawn(health, safeSpawns, UnityEngine.Random.Range(0, 1 + (int)(floor/10)));
+            Spawner.Spawn(health, safeSpawns, UnityEngine.Random.Range(0, 1 + (int)(floor/5)));
 
             if(floor != 1){
 
