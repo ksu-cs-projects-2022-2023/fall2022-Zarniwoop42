@@ -3843,7 +3843,7 @@ AudioSource:
   m_GameObject: {fileID: 1866250315}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 4bae12d855370a44686d3f9d46b5056a, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -4006,8 +4006,6 @@ MonoBehaviour:
   _spaceTiles:
   - {fileID: 11400000, guid: e867fbdaebbc87e47a5a5057d94a907c, type: 2}
   - {fileID: 11400000, guid: c17177b1a1d55984ba0b6273365ddddb, type: 2}
-  _maxWidth: 10
-  _maxHeight: 10
   _cellsToRemove: 50
 --- !u!114 &1901096540
 MonoBehaviour:
@@ -4127,7 +4125,7 @@ AudioSource:
   m_GameObject: {fileID: 1901096536}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 4bae12d855370a44686d3f9d46b5056a, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -4699,7 +4697,7 @@ GameObject:
   - component: {fileID: 2143685801}
   m_Layer: 0
   m_Name: EventSystem
-  m_TagString: Untagged
+  m_TagString: ES
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

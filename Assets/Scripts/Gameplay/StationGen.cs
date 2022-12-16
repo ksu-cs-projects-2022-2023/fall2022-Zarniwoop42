@@ -23,10 +23,7 @@ namespace Gameplay
         private TileBase[] _groundTiles;
         [SerializeField]
         private TileBase[] _spaceTiles;
-        [SerializeField]
-        private int _maxWidth = 10;
-        [SerializeField]
-        private int _maxHeight = 10;
+
 
         [SerializeField]
         private int _cellsToRemove = 50;

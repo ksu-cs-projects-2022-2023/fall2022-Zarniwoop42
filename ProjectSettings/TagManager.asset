@@ -10,6 +10,8 @@ TagManager:
   - Printer
   - Hatch
   - Item
+  - ES
+  - UI
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,8 @@ public class HitReg : MonoBehaviour
     public AudioClip pickup;
     public AudioClip swap;
 
+    private GameObject g;
+
     void OnTriggerEnter2D(Collider2D other){
         Collider2D o = other;
         if(o != null){
@@ -67,10 +69,26 @@ public class HitReg : MonoBehaviour
         }
 
         if(Physics2D.IsTouching(GetComponent<Collider2D>(), GameObject.FindGameObjectsWithTag("Hatch")[0].GetComponent<Collider2D>())){
-            if(GameObject.Find("Grid").GetComponent<Game>().unlocked && Input.GetKeyDown(KeyCode.E)){
-                GameObject.Find("Grid").GetComponent<Game>().newRoom();
+            if(g.GetComponent<Game>().unlocked && Input.GetKeyDown(KeyCode.E)){
+                g.GetComponent<Game>().GetComponent<AudioSource>().PlayOneShot(g.GetComponent<Game>().hatchEnterAudio, 0.4F);                
+                g.GetComponent<Game>().newRoom();
             }
         }
+
+        foreach(GameObject wep in GameObject.FindGameObjectsWithTag("Weapon")){
+            if(Physics2D.IsTouching(GetComponent<Collider2D>(), wep.GetComponent<Collider2D>())){
+                if(Input.GetKeyDown(KeyCode.E)){
+                    if(primary == null){
+                        wep.GetComponent<GunGen>().pickUp(true);
+                    }else if(secondary == null){
+                        wep.GetComponent<GunGen>().pickUp(false);
+                    }    
+                }
+            }
+        }
+
+        
+
 
         if(shieldActive){
             if (index != sprites.Length){ //inspiration from: https://gist.github.com/almirage/e9e4f447190371ee6ce9
@@ -138,6 +156,8 @@ public class HitReg : MonoBehaviour
 
     private void Start() {
         AS = GameObject.Find("Player").GetComponent<AudioSource>();
+
+        g = GameObject.Find("Grid");
 
         hurttimer = Time.time;
         healtimer = Time.time;

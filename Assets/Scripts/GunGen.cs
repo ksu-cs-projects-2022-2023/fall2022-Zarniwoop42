@@ -176,9 +176,11 @@ namespace Gameplay
         }
 
 
-        void pickUp(bool prim){
+        public void pickUp(bool prim){
 
             player.GetComponent<AudioSource>().PlayOneShot(hr.pickup, 0.4F);
+
+            gameObject.transform.GetChild(0).GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Weapon");
 
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
 
@@ -204,17 +206,17 @@ namespace Gameplay
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            try{
-            if(other.CompareTag("Player")){
+           // try{
+           // if(other.CompareTag("Player")){
                 //Debug.Log(gameObject.ToString()); 
 
-                if(hr.primary == null && hr.secondary != gameObject){
-                    pickUp(true);
-                }else if(hr.secondary == null && hr.primary != gameObject){
-                    pickUp(false);
-                }    
-            }
-            }catch(Exception){};
+             //   if(hr.primary == null && hr.secondary != gameObject){
+             //       pickUp(true);
+            //    }else if(hr.secondary == null && hr.primary != gameObject){
+             //       pickUp(false);
+            //    }    
+           // }
+          //  }catch(Exception){};
         }
 
 

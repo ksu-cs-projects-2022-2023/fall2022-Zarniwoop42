@@ -39,29 +39,43 @@ namespace Gameplay
         [SerializeField]
         public TextMeshProUGUI ammoStat;
         public TextMeshProUGUI stimUI;
+        public TextMeshProUGUI scoreUI;
+        public TextMeshProUGUI timeUI;
+        public TextMeshProUGUI floorTimeUI;
+        public TextMeshProUGUI floorUI;
+        public TextMeshProUGUI enemyNumUI;
         public List<Vector3> safeSpawns;
         public Image secondarySlot;
         public GameObject secondaryUI;
         public AudioClip explosionSound;
         public AudioClip bulletImpactSound;
         public AudioClip energyImpactSound;
+        public AudioClip hatchOpenAudio;
+        public AudioClip hatchEnterAudio;
         public Sprite hatchOpen;
         public bool unlocked = false;
+
+        public GameObject canvas;
 
         private float floortime = 40f;
         private float floorTimer;
 
+        private float gameTime;
+
         public int floor = 1;
 
         private HitReg hr;
+        private bool gameOver = false;
 
         // Start is called before the first frame update
         void Start()
         {
             hr = player.transform.Find("HitReg").GetComponent<HitReg>();
+            canvas.SetActive(true);
 
             healthStat.enabled = true;
             ammoStat.enabled = false;
+            gameTime = Time.time;
 
             g = gameObject.GetComponent(typeof(StationGen)) as StationGen;
             cam = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -91,6 +105,8 @@ namespace Gameplay
         public void newRoom(){
             unlocked = false;
             safeSpawns = new List<Vector3>();
+
+            floorUI.text = "floor: " + floor.ToString();
 
             killAll();
 
@@ -180,12 +196,31 @@ namespace Gameplay
             }
         }
 
+        private void setFloorTimeUI(){
+            if(unlocked)
+                floorTimeUI.text = "unlock: UNLOCKED";
+            else
+                floorTimeUI.text = "unlock: " + Mathf.RoundToInt(floortime - floorTimer).ToString();
+        }
+
         private void Update() {
             if(player != null){
                 floorTimer += Time.deltaTime;
 
-                if(floorTimer >= floortime || GameObject.FindGameObjectsWithTag("Enemy").Length == 0){
+                gameTime += Time.deltaTime;
+
+                setFloorTimeUI();
+
+                enemyNumUI.text = "enemies: " + GameObject.FindGameObjectsWithTag("Enemy").Length.ToString();
+
+                scoreUI.text = "points: " + points.ToString();
+
+                timeUI.text = "time: " + Mathf.RoundToInt(gameTime).ToString();
+                
+                if(unlocked == false && (floorTimer >= floortime || GameObject.FindGameObjectsWithTag("Enemy").Length == 0)){
                     GameObject.FindGameObjectsWithTag("Hatch")[0].GetComponent<SpriteRenderer>().sprite = hatchOpen;
+                    if(floor > 2)
+                        GetComponent<AudioSource>().PlayOneShot(hatchOpenAudio, 0.5F);
                     unlocked = true;
                 }
 
@@ -207,7 +242,7 @@ namespace Gameplay
                     if(secondaryUI != null)
                         Destroy(secondaryUI);
                 }
-                if(hr.health <= 0 && !hr.shieldActive){
+                if(hr.health <= 0 && !hr.shieldActive && !gameOver){
                     GameOver();
                 }
             }
@@ -215,9 +250,9 @@ namespace Gameplay
 
 
         public void GameOver(){
-            healthStat.enabled = false;
-            ammoStat.enabled = false;
-            deathScreen.Setup(points, floor - 2);
+            gameOver = true;
+            canvas.SetActive(false);
+            deathScreen.Setup(points, floor - 2, Mathf.RoundToInt(gameTime));
         }
 
     }

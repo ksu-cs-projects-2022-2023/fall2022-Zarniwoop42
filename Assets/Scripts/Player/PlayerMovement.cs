@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Gameplay;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed;
@@ -77,15 +77,29 @@ public class PlayerMovement : MonoBehaviour
 
     void ProcessInputs()
     {
-        if(Input.GetKeyDown(KeyCode.Q) && hr.stims > 0 && hr.health < 100){
+        if(Input.GetKeyDown(KeyCode.Alpha1) && hr.stims > 0 && hr.health < 100){
             hr.health += 20;
             hr.stims--;
             if(hr.health > 100)
                 hr.health = 100;
         }
-        if(Input.GetKeyDown(KeyCode.Space) && hr.shieldEquip && shieldtimer > shieldtime){
+        if(Input.GetKeyDown(KeyCode.Alpha2) && hr.shieldEquip && shieldtimer > shieldtime){
             hr.shieldActive = true;
             shieldtimer = 0;
+
+        }  if(Input.GetKeyDown(KeyCode.Q)){
+            if(hr.primary != null){
+                foreach(Transform i in player.transform){
+                    if(i.CompareTag("Weapon") && i.transform.GetChild(0).GetComponent<GunDetails>().uniqueID == hr.primary.transform.GetChild(0).GetComponent<GunDetails>().uniqueID){
+                        GetComponent<AudioSource>().PlayOneShot(hr.pickup, 0.3F);
+                        i.transform.SetParent(null);
+                        i.transform.GetChild(0).GetComponent<Renderer>().sortingLayerID = SortingLayer.NameToID("Ground");
+                        i.transform.GetChild(0).GetComponent<Renderer>().sortingOrder = 2;
+                        hr.primary = null;
+                        i.GetComponent<BoxCollider2D>().enabled = true;
+                    }
+                }
+            }
 
         }
         
